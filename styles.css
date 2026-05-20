@@ -1000,303 +1000,153 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* ==========================================================================
-   Desktop Layout — Fit-to-viewport, ZERO scrollbars
-   Uses flex distribution so every section gets proportional space.
+   Desktop Layout — STACKED, single-column.
+   Array goes full width on top. Code procedures go SIDE BY SIDE below.
+   Zero visible scrollbars. Everything fits in one viewport.
    ========================================================================== */
 @media (min-width: 900px) {
   body {
     height: 100dvh;
-    max-height: 100dvh;
     overflow: hidden;
-    padding: 0.5rem 0.75rem;
+    padding: 0.4rem 0.6rem;
     align-items: stretch;
-    justify-content: stretch;
   }
 
   .app-container {
     height: 100%;
-    max-height: 100%;
     overflow: hidden;
-    gap: 0.4rem;
-    display: flex;
-    flex-direction: column;
+    gap: 0.3rem;
   }
 
-  .app-header {
-    padding: 0.15rem 0;
-    flex-shrink: 0;
-  }
+  /* --- Header --- */
+  .app-header { padding: 0.1rem 0; flex-shrink: 0; }
+  .logo-area h1 { font-size: 1.3rem; }
+  .badge { font-size: 0.6rem; padding: 0.1rem 0.4rem; }
 
-  .logo-area h1 {
-    font-size: 1.35rem;
-  }
+  /* --- Presets --- */
+  .preset-panel { flex-shrink: 0; padding: 0.35rem 0.8rem; gap: 0.8rem; }
+  .preset-panel label { font-size: 0.7rem; }
+  .preset-panel input[type="text"] { padding: 0.4rem 0.6rem; font-size: 0.8rem; }
+  .preset-buttons .btn { padding: 0.3rem 0.6rem; font-size: 0.7rem; }
+  .btn-primary { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
 
-  .badge {
-    font-size: 0.65rem;
-    padding: 0.15rem 0.5rem;
-  }
-
-  .preset-panel {
-    flex-shrink: 0;
-    padding: 0.5rem 1rem;
-    gap: 1rem;
-  }
-
-  .preset-panel label {
-    font-size: 0.75rem;
-  }
-
-  .preset-panel input[type="text"] {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-  }
-
-  .preset-buttons .btn {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.75rem;
-  }
-
-  .btn-primary {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-  }
-
+  /* --- MAIN: stacked vertically, fills remaining space --- */
   .main-content {
     flex: 1;
     min-height: 0;
-    overflow: hidden;
-    gap: 0.75rem;
-    align-items: stretch;
-  }
-
-  .visualizer-column {
-    height: 100%;
-    overflow: hidden;
-    gap: 0.5rem;
-  }
-
-  .algo-tabs {
-    flex-shrink: 0;
-    padding: 0.2rem;
-  }
-
-  .algo-tab {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-  }
-
-  .narration-bubble {
-    flex-shrink: 0;
-    padding: 0.5rem 1rem;
-  }
-
-  .narration-header h4 {
-    font-size: 0.85rem;
-  }
-
-  #narration-text {
-    font-size: 0.875rem;
-    line-height: 1.4;
-  }
-
-  .visual-board {
-    flex: 1;
-    min-height: 0;
-    padding: 0.5rem;
-    gap: 0.5rem;
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
-
-  .visual-board::-webkit-scrollbar {
-    display: none;
-  }
-
-  .array-container {
-    padding: 0.25rem;
-    min-height: 80px;
-    flex-shrink: 0;
-    align-content: center;
-  }
-
-  .pill {
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.05rem;
-  }
-
-  .shelf-container {
-    padding-top: 0.5rem;
-    gap: 0.5rem;
-    flex-shrink: 0;
-  }
-
-  .shelf-group {
-    padding: 0.35rem 0.75rem;
-  }
-
-  .tree-container {
-    padding-top: 0.25rem;
-    flex: 1;
-    min-height: 0;
-  }
-
-  #heap-svg {
-    height: 100%;
-    max-height: 180px;
-  }
-
-  .code-column {
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    top: 0;
-    gap: 0.4rem;
     display: flex;
     flex-direction: column;
-  }
-
-  .code-box {
-    flex: 1;
-    min-height: 0;
-    display: none;
-    flex-direction: column;
+    gap: 0.3rem;
     overflow-y: auto;
     scrollbar-width: none;
   }
+  .main-content::-webkit-scrollbar { display: none; }
 
-  .code-box::-webkit-scrollbar {
+  /* --- Visualizer column: compact, natural height, full width --- */
+  .visualizer-column {
+    flex-shrink: 0;
+    overflow: visible;
+    gap: 0.3rem;
+  }
+
+  .algo-tabs { flex-shrink: 0; padding: 0.15rem; }
+  .algo-tab { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+
+  .narration-bubble { flex-shrink: 0; padding: 0.3rem 0.8rem; gap: 0.2rem; }
+  .narration-header h4 { font-size: 0.8rem; }
+  #narration-text { font-size: 0.8rem; line-height: 1.3; }
+
+  .visual-board {
+    min-height: auto;
+    padding: 0.35rem;
+    gap: 0.35rem;
+    overflow: visible;
+  }
+
+  .array-container { padding: 0.15rem; min-height: 55px; gap: 0.5rem; }
+  .pill { width: 2.75rem; height: 2.75rem; font-size: 1rem; }
+  .pill-index { font-size: 0.6rem; padding: 0.05rem 0.3rem; }
+  .pill-wrapper { gap: 0.3rem; }
+
+  .shelf-container { padding-top: 0.2rem; gap: 0.2rem; }
+  .shelf-group { padding: 0.2rem 0.5rem; }
+  .shelf-label { font-size: 0.65rem; min-width: 100px; }
+  .shelf-pills .pill { width: 2rem; height: 2rem; font-size: 0.75rem; }
+
+  .tree-container { padding-top: 0.15rem; }
+  #heap-svg { max-height: 130px; }
+
+  /* --- Code column: full width, natural height --- */
+  .code-column {
+    flex-shrink: 0;
+    overflow: visible;
+    position: relative;
+    top: 0;
+    gap: 0.3rem;
+  }
+
+  /* Code box: CSS GRID so procedures go side-by-side */
+  .code-box {
     display: none;
+    overflow: hidden;
   }
 
   .code-box.active {
-    display: flex;
-  }
-
-  .code-box-header {
-    padding: 0.5rem 1rem;
-    flex-shrink: 0;
-  }
-
-  .code-box-header h3 {
-    font-size: 0.85rem;
-  }
-
-  .procedure-block {
-    padding: 0.25rem 0;
-    flex-shrink: 0;
-  }
-
-  .procedure-title {
-    padding: 0.2rem 1rem;
-    font-size: 0.75rem;
-  }
-
-  .code-line {
-    padding: 0.2rem 1rem;
-    font-size: 0.75rem;
-    gap: 0.5rem;
-  }
-
-  .line-num {
-    font-size: 0.65rem;
-    min-width: 0.85rem;
-  }
-
-  .variables-panel {
-    flex-shrink: 0;
-    padding: 0.4rem 0.75rem;
-    gap: 0.35rem;
-  }
-
-  .variables-panel h3 {
-    font-size: 0.8rem;
-  }
-
-  .variables-grid {
-    min-height: auto;
-    gap: 0.4rem;
-  }
-
-  .variable-card {
-    padding: 0.25rem 0.5rem;
-    gap: 0.4rem;
-  }
-
-  .var-name {
-    font-size: 0.75rem;
-  }
-
-  .var-value {
-    font-size: 0.8rem;
-    padding: 0.1rem 0.35rem;
-  }
-
-  .no-vars-msg {
-    font-size: 0.75rem;
-  }
-
-  .playback-bar {
-    flex-shrink: 0;
-    padding: 0.35rem 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 0;
   }
 
-  .playback-bar-content {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
+  /* Header spans full width across all columns */
+  .code-box-header {
+    grid-column: 1 / -1;
+    padding: 0.35rem 0.8rem;
   }
+  .code-box-header h3 { font-size: 0.8rem; }
 
-  .playback-bar .speed-group {
-    flex: 1;
-    min-width: 130px;
+  /* Each procedure block is a grid cell (side by side) */
+  .procedure-block {
+    padding: 0.15rem 0;
+    border-bottom: none;
+    border-right: 1px dashed var(--border-color);
   }
+  .procedure-block:last-child { border-right: none; border-bottom: none; }
 
-  .playback-bar .speed-group label {
-    font-size: 0.7rem;
-    min-width: 40px;
-  }
+  .procedure-title { padding: 0.1rem 0.6rem; font-size: 0.65rem; }
+  .code-line { padding: 0.125rem 0.6rem; font-size: 0.68rem; gap: 0.35rem; }
+  .line-num { font-size: 0.55rem; min-width: 0.7rem; }
 
-  #speed-value {
-    font-size: 0.75rem;
-    padding: 0.15rem 0.4rem;
-  }
+  /* Comparison badges compact */
+  .comparison-badge { font-size: 0.55rem; padding: 0.05rem 0.25rem; margin-left: 0.3rem; }
 
-  .playback-bar .playback-controls {
-    flex: 0 0 auto;
-  }
+  /* --- Variables: compact strip below code --- */
+  .variables-panel { flex-shrink: 0; padding: 0.25rem 0.6rem; gap: 0.2rem; }
+  .variables-panel h3 { font-size: 0.7rem; }
+  .variables-grid { min-height: auto; gap: 0.25rem; }
+  .variable-card { padding: 0.15rem 0.35rem; gap: 0.25rem; }
+  .var-name { font-size: 0.65rem; }
+  .var-value { font-size: 0.7rem; padding: 0.05rem 0.25rem; }
+  .no-vars-msg { font-size: 0.65rem; }
 
-  .btn-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1rem;
-  }
+  /* --- Playback bar --- */
+  .playback-bar { flex-shrink: 0; padding: 0.25rem 0.8rem; gap: 0; }
+  .playback-bar-content { flex-direction: row; align-items: center; gap: 1rem; }
+  .playback-bar .speed-group { flex: 1; min-width: 110px; }
+  .playback-bar .speed-group label { font-size: 0.6rem; min-width: 32px; }
+  #speed-value { font-size: 0.65rem; padding: 0.1rem 0.25rem; }
+  .playback-bar .playback-controls { flex: 0 0 auto; gap: 0.5rem; }
+  .btn-icon { width: 2.15rem; height: 2.15rem; font-size: 0.85rem; }
+  .btn-play { width: 2.6rem; height: 2.6rem; }
+  .btn-play .play-icon { font-size: 0.95rem; }
+  .playback-bar .timeline-group { flex: 2; min-width: 160px; }
+  .timeline-labels { font-size: 0.65rem; }
 
-  .btn-play {
-    width: 3rem;
-    height: 3rem;
-  }
-
-  .btn-play .play-icon {
-    font-size: 1.15rem;
-  }
-
-  .playback-bar .timeline-group {
-    flex: 2;
-    min-width: 200px;
-  }
-
-  .timeline-labels {
-    font-size: 0.75rem;
-  }
-
+  /* --- Footer --- */
   .app-footer {
-    padding: 0.25rem 0;
+    padding: 0.15rem 0;
     margin-top: 0;
     flex-shrink: 0;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     border-top: 1px solid var(--border-color);
   }
 }
