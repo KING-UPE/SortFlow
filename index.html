@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SortFlow — Chunky Modern Sorting Visualizer</title>
+  <!-- Google Fonts: Plus Jakarta Sans for modern chunky aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-theme">
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-dot"></div>
+        <h1>SortFlow</h1>
+        <span class="badge">Visual Stepper</span>
+      </div>
+      <div class="theme-toggle-area">
+        <button id="theme-toggle-btn" class="theme-btn" aria-label="Toggle light/dark theme">
+          <span class="icon-sun">☀️</span>
+          <span class="icon-moon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Preset & Input Control Panel -->
+    <section class="panel preset-panel">
+      <div class="input-group">
+        <label for="array-input">Custom Array</label>
+        <div class="input-wrapper">
+          <input type="text" id="array-input" value="8, 3, 5, 9, 1, 6, 2, 7" placeholder="e.g. 5, 2, 9, 1">
+          <button id="apply-array-btn" class="btn btn-primary">Apply</button>
+        </div>
+      </div>
+      <div class="presets-group">
+        <label>Presets</label>
+        <div class="preset-buttons">
+          <button class="btn btn-outline" data-preset="random">Random</button>
+          <button class="btn btn-outline" data-preset="nearly">Nearly Sorted</button>
+          <button class="btn btn-outline" data-preset="reverse">Reverse</button>
+          <button class="btn btn-outline" data-preset="sorted">Already Sorted</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Layout (Visualizer & Pseudo-code Panels) -->
+    <main class="main-content">
+      <!-- Left Column: The Visualizer & State -->
+      <div class="visualizer-column">
+        <!-- Algorithm Tabs (Chunky Toggles) -->
+        <div class="algo-tabs">
+          <button class="algo-tab active" data-algo="quick">Quick Sort</button>
+          <button class="algo-tab" data-algo="merge">Merge Sort</button>
+          <button class="algo-tab" data-algo="heap">Heap Sort</button>
+        </div>
+
+        <!-- Narration Bubble -->
+        <div class="narration-bubble">
+          <div class="narration-header">
+            <span class="narration-icon">💡</span>
+            <h4>What is happening?</h4>
+          </div>
+          <p id="narration-text">Select an algorithm and press Play or Step Forward to begin. Enter your own numbers or use a preset to see the magic!</p>
+        </div>
+
+        <!-- Visual Board Container -->
+        <div class="panel visual-board">
+          <!-- Main Array Visualizer -->
+          <div class="array-container" id="main-array-container">
+            <!-- Array pills will be rendered dynamically here -->
+          </div>
+
+          <!-- Shelf Container (Only for Merge Sort) -->
+          <div class="shelf-container hidden" id="merge-shelf-container">
+            <div class="shelf-group">
+              <span class="shelf-label">Left subarray L:</span>
+              <div class="shelf-pills" id="left-shelf-pills"></div>
+            </div>
+            <div class="shelf-group">
+              <span class="shelf-label">Right subarray R:</span>
+              <div class="shelf-pills" id="right-shelf-pills"></div>
+            </div>
+          </div>
+
+          <!-- Tree Container (Only for Heap Sort) -->
+          <div class="tree-container hidden" id="heap-tree-container">
+            <!-- Heap visual tree rendered here -->
+            <svg id="heap-svg" width="100%" height="240"></svg>
+          </div>
+        </div>
+
+        <!-- Playback Controller -->
+        <div class="panel playback-panel">
+          <div class="playback-controls">
+            <button id="btn-reset" class="btn btn-icon" title="Reset array">
+              🔄
+            </button>
+            <button id="btn-prev" class="btn btn-icon" title="Step backward">
+              ⏮️
+            </button>
+            <button id="btn-play-pause" class="btn btn-icon btn-play" title="Play / Pause">
+              <span class="play-icon">▶️</span>
+            </button>
+            <button id="btn-next" class="btn btn-icon" title="Step forward">
+              ⏭️
+            </button>
+          </div>
+
+          <!-- Step Progress Timeline Slider -->
+          <div class="timeline-group">
+            <div class="timeline-labels">
+              <span class="timeline-step">Step <span id="current-step-counter">0</span> / <span id="total-steps-counter">0</span></span>
+              <span class="timeline-percent" id="timeline-percentage">0%</span>
+            </div>
+            <input type="range" id="timeline-slider" min="0" max="0" value="0">
+          </div>
+
+          <!-- Speed Slider -->
+          <div class="speed-group">
+            <label for="speed-slider">Speed</label>
+            <input type="range" id="speed-slider" min="1" max="10" value="5">
+            <span id="speed-value">1.0x</span>
+          </div>
+        </div>
+
+        <!-- Variable Tracker Card Grid -->
+        <div class="variables-panel">
+          <h3>Variables Tracking</h3>
+          <div class="variables-grid" id="variables-container">
+            <!-- Variable key-values rendered dynamically -->
+            <div class="no-vars-msg">No active variables. Press step to trace.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Pseudo-code Stepper -->
+      <div class="code-column">
+        <!-- Quick Sort Pseudo-code Box -->
+        <div class="code-box active" id="code-quick-box">
+          <div class="code-box-header">
+            <h3>Quick Sort CLRS Pseudo-code</h3>
+          </div>
+          
+          <div class="procedure-block">
+            <div class="procedure-title">Procedure QUICKSORT(A, p, r)</div>
+            <pre class="code-lines">
+<span class="code-line" data-line="q-1"><span class="line-num">1</span>if p &lt; r</span>
+<span class="code-line" data-line="q-2"><span class="line-num">2</span>    then q ← PARTITION(A, p, r)</span>
+<span class="code-line" data-line="q-3"><span class="line-num">3</span>         QUICKSORT(A, p, q - 1)</span>
+<span class="code-line" data-line="q-4"><span class="line-num">4</span>         QUICKSORT(A, q + 1, r)</span>
+            </pre>
+          </div>
+
+          <div class="procedure-block">
+            <div class="procedure-title">Procedure PARTITION(A, p, r)</div>
+            <pre class="code-lines">
+<span class="code-line" data-line="p-1"><span class="line-num">1</span>x ← A[r]</span>
+<span class="code-line" data-line="p-2"><span class="line-num">2</span>i ← p - 1</span>
+<span class="code-line" data-line="p-3"><span class="line-num">3</span>for j ← p to r - 1</span>
+<span class="code-line" data-line="p-4"><span class="line-num">4</span>    do if A[j] ≤ x</span>
+<span class="code-line" data-line="p-5"><span class="line-num">5</span>        then i ← i + 1</span>
+<span class="code-line" data-line="p-6"><span class="line-num">6</span>             exchange A[i] ↔ A[j]</span>
+<span class="code-line" data-line="p-7"><span class="line-num">7</span>exchange A[i + 1] ↔ A[r]</span>
+<span class="code-line" data-line="p-8"><span class="line-num">8</span>return i + 1</span>
+            </pre>
+          </div>
+        </div>
+
+        <!-- Merge Sort Pseudo-code Box -->
+        <div class="code-box" id="code-merge-box">
+          <div class="code-box-header">
+            <h3>Merge Sort CLRS Pseudo-code</h3>
+          </div>
+
+          <div class="procedure-block">
+            <div class="procedure-title">Procedure MERGESORT(A, p, r)</div>
+            <pre class="code-lines">
+<span class="code-line" data-line="ms-1"><span class="line-num">1</span>if p &lt; r</span>
+<span class="code-line" data-line="ms-2"><span class="line-num">2</span>    then q ← ⌊(p + r) / 2⌋</span>
+<span class="code-line" data-line="ms-3"><span class="line-num">3</span>         MERGESORT(A, p, q)</span>
+<span class="code-line" data-line="ms-4"><span class="line-num">4</span>         MERGESORT(A, q + 1, r)</span>
+<span class="code-line" data-line="ms-5"><span class="line-num">5</span>         MERGE(A, p, q, r)</span>
+            </pre>
+          </div>
+
+          <div class="procedure-block">
+            <div class="procedure-title">Procedure MERGE(A, p, q, r)</div>
+            <pre class="code-lines">
+<span class="code-line" data-line="m-1"><span class="line-num">1</span>n₁ ← q - p + 1</span>
+<span class="code-line" data-line="m-2"><span class="line-num">2</span>n₂ ← r - q</span>
+<span class="code-line" data-line="m-3"><span class="line-num">3</span>create arrays L[1..n₁ + 1] and R[1..n₂ + 1]</span>
+<span class="code-line" data-line="m-4"><span class="line-num">4</span>for i ← 1 to n₁</span>
+<span class="code-line" data-line="m-5"><span class="line-num">5</span>    do L[i] ← A[p + i - 1]</span>
+<span class="code-line" data-line="m-6"><span class="line-num">6</span>for j ← 1 to n₂</span>
+<span class="code-line" data-line="m-7"><span class="line-num">7</span>    do R[j] ← A[q + j]</span>
+<span class="code-line" data-line="m-8"><span class="line-num">8</span>L[n₁ + 1] ← ∞</span>
+<span class="code-line" data-line="m-9"><span class="line-num">9</span>R[n₂ + 1] ← ∞</span>
+<span class="code-line" data-line="m-10"><span class="line-num">10</span>i ← 1</span>
+<span class="code-line" data-line="m-11"><span class="line-num">11</span>j ← 1</span>
+<span class="code-line" data-line="m-12"><span class="line-num">12</span>for k ← p to r</span>
+<span class="code-line" data-line="m-13"><span class="line-num">13</span>    do if L[i] ≤ R[j]</span>
+<span class="code-line" data-line="m-14"><span class="line-num">14</span>        then A[k] ← L[i]</span>
+<span class="code-line" data-line="m-15"><span class="line-num">15</span>             i ← i + 1</span>
+<span class="code-line" data-line="m-16"><span class="line-num">16</span>        else A[k] ← R[j]</span>
+<span class="code-line" data-line="m-17"><span class="line-num">17</span>             j ← j + 1</span>
+            </pre>
+          </div>
+        </div>
+
+        <!-- Heap Sort Pseudo-code Box -->
+        <div class="code-box" id="code-heap-box">
+          <div class="code-box-header">
+            <h3>Heap Sort CLRS Pseudo-code</h3>
+          </div>
+
+          <div class="procedure-block">
+            <div class="procedure-title">Procedure HEAPSORT(A)</div>
+            <pre class="code-lines">
+<span class="code-line" data-line="hs-1"><span class="line-num">1</span>BUILD_HEAP(A)</span>
+<span class="code-line" data-line="hs-2"><span class="line-num">2</span>for i ← length[A] down to 2</span>
+<span class="code-line" data-line="hs-3"><span class="line-num">3</span>    do exchange A[1] ↔ A[i]</span>
+<span class="code-line" data-line="hs-4"><span class="line-num">4</span>       heap_size[A] ← heap_size[A] - 1</span>
+<span class="code-line" data-line="hs-5"><span class="line-num">5</span>       HEAPIFY(A, 1)</span>
+            </pre>
+          </div>
+
+          <div class="procedure-block">
+            <div class="procedure-title">Procedure BUILD_HEAP(A)</div>
+            <pre class="code-lines">
+<span class="code-line" data-line="bh-1"><span class="line-num">1</span>heap_size[A] ← length[A]</span>
+<span class="code-line" data-line="bh-2"><span class="line-num">2</span>for i ← ⌊length[A] / 2⌋ downto 1</span>
+<span class="code-line" data-line="bh-3"><span class="line-num">3</span>    do HEAPIFY(A, i)</span>
+            </pre>
+          </div>
+
+          <div class="procedure-block">
+            <div class="procedure-title">Procedure HEAPIFY(A, i)</div>
+            <pre class="code-lines">
+<span class="code-line" data-line="h-1"><span class="line-num">1</span>l ← LEFT_CHILD(i)</span>
+<span class="code-line" data-line="h-2"><span class="line-num">2</span>r ← RIGHT_CHILD(i)</span>
+<span class="code-line" data-line="h-3"><span class="line-num">3</span>if l ≤ heap_size[A] and A[l] &gt; A[i]</span>
+<span class="code-line" data-line="h-4"><span class="line-num">4</span>    then largest ← l</span>
+<span class="code-line" data-line="h-5"><span class="line-num">5</span>    else largest ← i</span>
+<span class="code-line" data-line="h-6"><span class="line-num">6</span>if r ≤ heap_size[A] and A[r] &gt; A[largest]</span>
+<span class="code-line" data-line="h-7"><span class="line-num">7</span>    then largest ← r</span>
+<span class="code-line" data-line="h-8"><span class="line-num">8</span>if largest ≠ i</span>
+<span class="code-line" data-line="h-9"><span class="line-num">9</span>    then exchange A[i] ↔ A[largest]</span>
+<span class="code-line" data-line="h-10"><span class="line-num">10</span>         HEAPIFY(A, largest)</span>
+            </pre>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>SortFlow Visualizer — Engineered for maximum clarity and learning. Cloned with 💛.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
