@@ -93,48 +93,6 @@
           </div>
         </div>
 
-        <!-- Playback Controller -->
-        <div class="panel playback-panel">
-          <div class="playback-controls">
-            <button id="btn-reset" class="btn btn-icon" title="Reset array">
-              🔄
-            </button>
-            <button id="btn-prev" class="btn btn-icon" title="Step backward">
-              ⏮️
-            </button>
-            <button id="btn-play-pause" class="btn btn-icon btn-play" title="Play / Pause">
-              <span class="play-icon">▶️</span>
-            </button>
-            <button id="btn-next" class="btn btn-icon" title="Step forward">
-              ⏭️
-            </button>
-          </div>
-
-          <!-- Step Progress Timeline Slider -->
-          <div class="timeline-group">
-            <div class="timeline-labels">
-              <span class="timeline-step">Step <span id="current-step-counter">0</span> / <span id="total-steps-counter">0</span></span>
-              <span class="timeline-percent" id="timeline-percentage">0%</span>
-            </div>
-            <input type="range" id="timeline-slider" min="0" max="0" value="0">
-          </div>
-
-          <!-- Speed Slider -->
-          <div class="speed-group">
-            <label for="speed-slider">Speed</label>
-            <input type="range" id="speed-slider" min="1" max="10" value="5">
-            <span id="speed-value">1.0x</span>
-          </div>
-        </div>
-
-        <!-- Variable Tracker Card Grid -->
-        <div class="variables-panel">
-          <h3>Variables Tracking</h3>
-          <div class="variables-grid" id="variables-container">
-            <!-- Variable key-values rendered dynamically -->
-            <div class="no-vars-msg">No active variables. Press step to trace.</div>
-          </div>
-        </div>
       </div>
 
       <!-- Right Column: Pseudo-code Stepper -->
@@ -253,12 +211,58 @@
             </pre>
           </div>
         </div>
+        
+        <!-- Variable Tracker Card Grid (relocated near bottom of pseudocode) -->
+        <div class="variables-panel">
+          <h3>Variables Tracking</h3>
+          <div class="variables-grid" id="variables-container">
+            <!-- Variable key-values rendered dynamically -->
+            <div class="no-vars-msg">No active variables. Press step to trace.</div>
+          </div>
+        </div>
       </div>
     </main>
 
+    <!-- Playback Bottom Bar -->
+    <section class="panel playback-bar" id="playback-bar">
+      <div class="playback-bar-content">
+        <!-- Speed Slider -->
+        <div class="speed-group">
+          <label for="speed-slider">Speed</label>
+          <input type="range" id="speed-slider" min="1" max="10" value="5">
+          <span id="speed-value">1.0x</span>
+        </div>
+
+        <!-- Play/Pause Controls -->
+        <div class="playback-controls">
+          <button id="btn-reset" class="btn btn-icon" title="Reset array">
+            🔄
+          </button>
+          <button id="btn-prev" class="btn btn-icon" title="Step backward">
+            ⏮️
+          </button>
+          <button id="btn-play-pause" class="btn btn-icon btn-play" title="Play / Pause">
+            <span class="play-icon">▶️</span>
+          </button>
+          <button id="btn-next" class="btn btn-icon" title="Step forward">
+            ⏭️
+          </button>
+        </div>
+
+        <!-- Step Progress Timeline Slider -->
+        <div class="timeline-group">
+          <div class="timeline-labels">
+            <span class="timeline-step">Step <span id="current-step-counter">0</span> / <span id="total-steps-counter">0</span></span>
+            <span class="timeline-percent" id="timeline-percentage">0%</span>
+          </div>
+          <input type="range" id="timeline-slider" min="0" max="0" value="0">
+        </div>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer class="app-footer">
-      <p>SortFlow Visualizer — Engineered for maximum clarity and learning. Cloned with 💛.</p>
+      <p>SortFlow Visualizer — Engineered for maximum clarity and learning by <a href="https://upendradasanayaka.vercel.app/" target="_blank" class="credit-link">Upendra Dasanayaka</a> 💛</p>
     </footer>
   </div>
 
