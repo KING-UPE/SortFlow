@@ -1036,6 +1036,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     min-height: 0;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 0.3rem;
     overflow-y: auto;
     scrollbar-width: none;
@@ -1047,6 +1048,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     flex-shrink: 0;
     overflow: visible;
     gap: 0.3rem;
+    width: 100%;
   }
 
   .algo-tabs { flex-shrink: 0; padding: 0.15rem; }
@@ -1083,6 +1085,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     position: relative;
     top: 0;
     gap: 0.3rem;
+    width: 100%;
   }
 
   /* Code box: CSS GRID so procedures go side-by-side */
