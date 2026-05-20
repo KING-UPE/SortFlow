@@ -1258,16 +1258,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
     height: 230px;
     max-width: 100%;
     width: 100%;
+    pointer-events: none; /* Let touch events pass through to allow scrolling */
   }
 
   .tree-container {
     width: 100%;
-    overflow: visible;
   }
 
-  .visual-board {
-    overflow: visible;
-  }
+  /* No redundant visual-board overflow here, use the auto one above */
 
   .playback-bar {
     position: fixed;
