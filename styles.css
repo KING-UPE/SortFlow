@@ -1256,6 +1256,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
   #heap-svg {
     height: 230px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .tree-container {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .visual-board {
+    overflow: visible;
   }
 
   .playback-bar {
