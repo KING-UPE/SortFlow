@@ -1354,6 +1354,24 @@ input[type="range"]::-webkit-slider-thumb:hover {
     padding: 0.25rem 0.75rem;
     font-size: 0.8rem;
   }
+
+  /* Hide all scrollbars on mobile — scroll works, bar invisible */
+  body,
+  .code-box,
+  .code-column,
+  .visual-board,
+  .main-content,
+  .app-container {
+    scrollbar-width: none;
+  }
+  body::-webkit-scrollbar,
+  .code-box::-webkit-scrollbar,
+  .code-column::-webkit-scrollbar,
+  .visual-board::-webkit-scrollbar,
+  .main-content::-webkit-scrollbar,
+  .app-container::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* ==========================================================================
